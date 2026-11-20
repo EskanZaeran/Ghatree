@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d4ed8">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>پنل طرح قطره و ۳۱۳</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--b:#1d4ed8;--b2:#3b82f6;--sky:#0ea5e9;--vi:#6366f1;--bg:#f1f6ff;--t:#0f1e3d;--m:#64748b;--l:#dbe6fb;--r:#e11d48;--sh:0 8px 28px #1d4ed814;--nav:72px}
+*{box-sizing:border-box;margin:0;min-width:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:Vazirmatn,Tahoma,sans-serif;background:var(--bg);color:var(--t);min-height:100dvh;overflow-x:hidden;font-size:15px}
+.hide{display:none!important}
+button{font:inherit;cursor:pointer;border:0;border-radius:14px;padding:11px 16px;background:var(--b);color:#fff;transition:.2s;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+button:active{transform:scale(.97)}button.o{background:#fff;color:var(--b);border:1px solid var(--l)}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+input,select{font:inherit;font-size:16px;width:100%;padding:12px;min-height:46px;border:1px solid var(--l);border-radius:14px;background:#fff;outline:0;color:var(--t)}
+input:focus,select:focus{border-color:var(--b2);box-shadow:0 0 0 3px #3b82f633}
+label.l{font-size:.82rem;color:var(--m);display:block;margin:12px 0 5px}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pulse{50%{box-shadow:0 0 0 14px #3b82f622}}
+@keyframes grow{from{width:0}}@keyframes spin{from{stroke-dasharray:0 400}}
+#login{display:grid;place-items:center;min-height:100dvh;padding:16px;background:radial-gradient(circle at 15% 10%,#bfdbfe,transparent 50%),radial-gradient(circle at 90% 95%,#93c5fd,transparent 45%),#f1f6ff}
+.card{background:#fff;border-radius:22px;padding:18px;box-shadow:var(--sh);animation:up .5s both}
+#login .card{width:100%;max-width:380px;text-align:center;padding:26px 22px}
+.logo{width:72px;height:72px;margin:0 auto 12px;border-radius:22px;animation:pulse 2.5s infinite;overflow:hidden}.logo img{width:100%;display:block}
+.err{color:var(--r);font-size:.85rem;min-height:1.3em;margin-top:6px}
+/* چیدمان: موبایل = نوار پایین، دسکتاپ = سایدبار */
+#shell{min-height:100dvh;padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom) + 12px)}
+.top{position:sticky;top:0;z-index:5;background:#ffffffd9;backdrop-filter:blur(12px);border-bottom:1px solid var(--l);padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:10px}
+.top h1{font-size:1.02rem;font-weight:800;color:var(--b)}
+.top button{background:#eff6ff;color:var(--b);padding:8px 12px;min-height:40px}
+nav{position:fixed;bottom:0;inset-inline:0;z-index:6;height:calc(var(--nav) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:#ffffffee;backdrop-filter:blur(14px);border-top:1px solid var(--l);display:flex;justify-content:space-around;align-items:center}
+nav .n{background:none;color:var(--m);flex-direction:column;gap:2px;font-size:.7rem;padding:6px 10px;min-height:56px;border-radius:16px}
+nav .n.on{color:var(--b);background:#eff6ff;font-weight:600}
+nav .fab{background:linear-gradient(135deg,var(--b),var(--sky));color:#fff;width:58px;height:58px;border-radius:50%;padding:0;margin-top:-26px;box-shadow:0 10px 24px #1d4ed860;flex:none}
+nav .fab svg{width:26px;height:26px}
+nav .brand,nav .side-only{display:none}
+main{max-width:1100px;margin:auto;padding:14px;display:grid;gap:14px}
+@media(min-width:900px){
+ #shell{padding:0;padding-inline-start:240px}
+ nav{inset-inline-end:0;inset-inline-start:auto;top:0;bottom:0;width:240px;height:auto;flex-direction:column;justify-content:flex-start;align-items:stretch;gap:6px;padding:22px 14px;border-top:0;border-inline-start:1px solid var(--l);background:linear-gradient(180deg,#1d4ed8,#0ea5e9);backdrop-filter:none}
+ nav .n{flex-direction:row;justify-content:flex-start;gap:12px;color:#ffffffcc;font-size:.95rem;padding:12px 14px;min-height:48px}
+ nav .n.on{background:#ffffff2e;color:#fff}
+ nav .fab{width:auto;height:48px;border-radius:14px;margin:8px 0;background:#fff;color:var(--b);box-shadow:none;order:-1;font-size:.95rem;font-weight:600;padding:0 14px}
+ nav .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;margin-bottom:14px;order:-2;font-size:1.05rem}
+ nav .brand img{width:38px;border-radius:11px}
+ nav .side-only{display:flex;margin-top:auto}
+ .top .out{display:none}
+ .top{padding-inline:24px}main{padding:22px 24px}
+}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:760px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{border-radius:18px;padding:14px;background:#fff;box-shadow:var(--sh);animation:up .5s both;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:5px;background:var(--b2)}
+.stat:nth-child(2)::after{background:var(--sky)}.stat:nth-child(3)::after{background:var(--vi)}.stat:nth-child(4)::after{background:#14b8a6}
+.stat small{color:var(--m);font-size:.78rem}.stat b{display:block;font-size:clamp(1.05rem,4.5vw,1.5rem);color:var(--b);margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr;gap:14px}@media(min-width:760px){.grid2{grid-template-columns:1fr 1fr}}
+.chart{height:260px;position:relative}
+.tools{display:grid;gap:8px;margin-bottom:12px}
+@media(min-width:760px){.tools{grid-template-columns:1fr auto auto}}
+.pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.pills button{background:#fff;color:var(--b);border:1px solid var(--l);white-space:nowrap;padding:8px 14px;min-height:40px}.pills button.on{background:var(--b);color:#fff}
+table{width:100%;border-collapse:collapse}
+th{background:var(--bg);color:var(--b);font-weight:600;font-size:.85rem}
+th,td{padding:11px 10px;text-align:right;border-bottom:1px solid var(--l)}
+tbody tr{animation:up .35s both}tbody tr:hover{background:#f5f9ff}
+.tag{padding:3px 11px;border-radius:99px;font-size:.75rem;color:#fff;white-space:nowrap}.tag.ghatre{background:var(--sky)}.tag.p313{background:var(--vi)}
+.ac{display:flex;gap:6px;flex-wrap:wrap}.ac button{padding:6px 12px;min-height:36px;font-size:.8rem}
+.ad{background:#ecfeff;color:#0369a1}.ed{background:#eff6ff;color:var(--b)}.x{background:#fff1f2;color:var(--r)}
+@media(max-width:720px){
+ table,tbody,tr,td{display:block;width:100%}thead{display:none}
+ tbody tr{border:1px solid var(--l);border-radius:16px;padding:6px 12px;margin-bottom:10px}
+ td{display:flex;justify-content:space-between;align-items:center;gap:10px;border:0;padding:7px 0;text-align:left}
+ td::before{content:attr(data-l);color:var(--m);font-size:.8rem}
+ td.ac{justify-content:flex-start;padding-top:10px}td.ac::before{display:none}
+ td:first-child{font-weight:600;font-size:1rem}
+}
+/* پنجره افزودن */
+#modal{position:fixed;inset:0;background:#0f1e3d99;z-index:20;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
+.sheet{background:#fff;width:100%;max-width:520px;max-height:94dvh;display:flex;flex-direction:column;border-radius:26px 26px 0 0;animation:up .3s;overflow:hidden}
+@media(min-width:600px){#modal{align-items:center;padding:16px}.sheet{border-radius:26px;max-height:90dvh}}
+.sh-h{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 10px;gap:10px}
+.sh-h h3{font-size:1.05rem}.sh-h button{background:#f1f5f9;color:var(--m);width:40px;padding:0;min-height:40px;border-radius:50%}
+.sh-b{overflow-y:auto;padding:0 18px 12px;flex:1;-webkit-overflow-scrolling:touch}
+.sh-f{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 18px;padding-bottom:max(12px,env(safe-area-inset-bottom));border-top:1px solid var(--l);background:#fff}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:380px){.g2{grid-template-columns:1fr}}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#eff6ff;border-radius:16px;padding:12px 14px;margin-top:16px;cursor:pointer}
+.sw input{width:46px;height:26px;min-height:0;padding:0;appearance:none;-webkit-appearance:none;background:#cbd5e1;border:0;border-radius:99px;position:relative;transition:.2s;flex:none}
+.sw input::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.sw input:checked{background:var(--b)}.sw input:checked::after{inset-inline-start:23px}
+.kid{border:1px solid var(--l);border-radius:16px;padding:12px;margin-top:10px;background:#fbfdff;animation:up .3s}
+.kh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:.85rem;color:var(--b)}
+.kh button{background:#fff1f2;color:var(--r);padding:4px 10px;min-height:32px;font-size:.78rem}
+.addk{width:100%;margin-top:10px;background:#fff;color:var(--b);border:1.5px dashed var(--b2)}
+.toast{position:fixed;bottom:calc(var(--nav) + 20px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:var(--t);color:#fff;padding:11px 20px;border-radius:14px;z-index:30;animation:up .3s;max-width:90vw}
+.empty{text-align:center;color:var(--m);padding:26px}
+#info{background:linear-gradient(160deg,#1d4ed8,#0ea5e9);color:#fff;border-radius:24px;padding:20px;display:grid;gap:18px}
+#info h2{font-size:clamp(1.15rem,5vw,1.6rem);font-weight:800;text-align:center}
+#info .sub{text-align:center;opacity:.85;font-size:.85rem;margin-top:-10px}
+.big{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}@media(min-width:760px){.big{grid-template-columns:repeat(4,1fr)}}
+.big div{background:#ffffff22;border-radius:18px;padding:14px;text-align:center}
+.big b{display:block;font-size:clamp(1.2rem,5vw,1.7rem)}.big small{opacity:.85;font-size:.78rem}
+.ip{background:#fff;color:var(--t);border-radius:20px;padding:16px}.ip h3{font-size:.95rem;margin-bottom:12px;color:var(--b)}
+.ring{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center}
+.ring svg{width:150px;height:150px;transform:rotate(-90deg)}.ring circle{fill:none;stroke-width:16;animation:spin 1.2s both}
+.lg{display:grid;gap:8px;font-size:.9rem}.lg i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-inline-end:6px}
+.lb{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:center;margin-bottom:12px}
+.lb .n{width:28px;height:28px;border-radius:50%;background:var(--b);color:#fff;display:grid;place-items:center;font-size:.8rem}
+.lb .tr{height:12px;border-radius:9px;background:#e8f0fe;margin-top:5px;overflow:hidden}.lb .tr span{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--b2),var(--sky));animation:grow 1.2s both}
+.lb small{color:var(--m);font-size:.78rem}
+.net{display:grid;gap:10px}.net>div{background:var(--bg);border-radius:16px;padding:12px}.net b{color:var(--b)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;padding-inline-start:14px;border-inline-start:3px solid var(--b2)}
+.chip{font-size:.78rem;padding:4px 10px;border-radius:99px;color:#fff}
+.seg2{display:grid;grid-template-columns:1fr 1fr;background:#e4ecfb;border-radius:16px;padding:4px;gap:4px}
+.seg2 button{background:transparent;color:var(--m)}.seg2 button.on{background:#fff;color:var(--b);box-shadow:var(--sh);font-weight:600}
+.vb{display:flex;align-items:stretch;gap:8px;height:150px}
+.vb>div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;text-align:center}
+.vb b{font-size:.8rem}.vb small{font-size:.7rem;color:var(--m);line-height:1.2}
+.vb span{width:100%;max-width:46px;border-radius:9px 9px 3px 3px;background:linear-gradient(180deg,var(--sky),var(--b2));animation:gh 1s both}
+@keyframes gh{from{height:0}}
+#info.night{background:linear-gradient(160deg,#0b1224,#1e2a55)}
+.night .ip{background:#131c38;color:#e6ecff}.night .ip h3{color:#7cc4ff}.night .lb .tr{background:#243055}.night .lb .n{background:#0ea5e9}
+.night .net>div{background:#1a2446}.night .net b{color:#7cc4ff}.night .ring circle:first-child{stroke:#243055}.night .vb small,.night .lb small{color:#9fb0d9}
+#info.light{background:#fff;color:var(--t);border:1px solid var(--l)}
+.light .big div{background:#eff6ff}.light .ip{background:#f6f9ff;box-shadow:none}
+#rend{position:fixed;left:-10000px;top:0}
+.pg{width:794px;height:1123px;padding:48px 52px;position:relative;background:#fff;color:#111827;direction:rtl;font-family:Vazirmatn,Tahoma,sans-serif;overflow:hidden}
+.pg .rh{display:flex;align-items:center;gap:16px;border-bottom:3px solid #1d4ed8;padding-bottom:14px;margin-bottom:18px}
+.pg .lg2{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#1d4ed8,#0ea5e9);display:grid;place-items:center;font-size:28px;color:#fff}
+.pg h1{font-size:21px;color:#1d4ed8}.pg .rh p{font-size:12px;color:#64748b;margin-top:4px}.pg .meta{font-size:11px;color:#475569;line-height:1.9;text-align:left}
+.pg h2{font-size:14px;color:#1d4ed8;margin:20px 0 8px}
+.rt{width:100%;border-collapse:collapse;font-size:12px}.rt th{background:#1d4ed8;color:#fff;padding:8px 10px;text-align:right;font-weight:600}
+.rt td{padding:7px 10px;border:1px solid #dbe6fb;text-align:right}.rt tbody tr:nth-child(even){background:#f4f8ff}
+.pg .ft{position:absolute;bottom:26px;inset-inline:52px;display:flex;justify-content:space-between;font-size:10.5px;color:#64748b;border-top:1px solid #dbe6fb;padding-top:8px}
+.pg .sig{display:flex;justify-content:space-around;margin-top:46px;font-size:12px;text-align:center;color:#334155}
+.opts{display:grid;gap:4px}.rcard{display:grid;gap:12px}.rcard p{color:var(--m);font-size:.88rem;line-height:1.9}
+.rbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media print{nav,.top,.tools,.ac,#modal{display:none!important}#shell{padding:0}body{background:#fff}.card,.stat{box-shadow:none}}
+</style>
+</head>
+<body>
+
+<section id="login">
+  <div class="card">
+    <div class="logo"><img src="icon.svg" alt=""></div>
+    <h2>ورود به پنل مدیریت</h2>
+    <p style="color:var(--m);font-size:.85rem;margin-top:4px">طرح قطره و طرح ۳۱۳</p>
+    <label class="l" style="text-align:right">نام کاربری</label><input id="u" autocomplete="username" autocapitalize="off">
+    <label class="l" style="text-align:right">رمز عبور</label><input id="p" type="password" autocomplete="current-password">
+    <div class="err" id="le"></div>
+    <button style="width:100%;margin-top:6px" onclick="login()">ورود</button>
+    <button id="bio" class="o hide" style="width:100%;margin-top:10px" onclick="bioLogin()"><i data-i="fp"></i>ورود با اثرانگشت</button>
+  </div>
+</section>
+
+<div id="rend"></div>
+<div id="shell" class="hide">
+  <div class="top"><h1 id="vt">داشبورد</h1><div style="display:flex;gap:8px"><button id="bioT" class="hide" onclick="bioToggle()" aria-label="اثرانگشت"><i data-i="fp"></i></button><button class="out" onclick="logout()"><i data-i="out"></i>خروج</button></div></div>
+  <main>
+    <div id="v-dash" style="display:grid;gap:14px">
+      <div class="stats" id="stats"></div>
+      <div class="grid2"><div class="card"><div class="chart"><canvas id="c1"></canvas></div></div><div class="card"><div class="chart"><canvas id="c2"></canvas></div></div></div>
+    </div>
+    <div id="v-mem" class="hide card">
+      <div class="tools">
+        <input id="q" placeholder="🔍 جستجوی نام یا موبایل" oninput="render()">
+        <button class="o" onclick="exportXlsx()">اکسل</button><button class="o" onclick="makePdf()">PDF</button>
+      </div>
+      <div class="pills" id="pills" style="margin-bottom:12px"><button data-p="all" class="on">همه</button><button data-p="313">طرح ۳۱۳</button><button data-p="ghatre">طرح قطره</button></div>
+      <table><thead><tr><th>نام و نام خانوادگی</th><th>موبایل</th><th>طرح</th><th>معرف</th><th>تعهد ماهانه (تومان)</th><th>زیرمجموعه</th><th></th></tr></thead><tbody id="tb"></tbody></table>
+    </div>
+    <div id="v-info" class="hide" style="display:grid;gap:12px">
+      <div class="seg2"><button class="on" data-t="ig">✨ اینفوگرافیک</button><button data-t="rp">📄 گزارش رسمی</button></div>
+      <div class="card opts">
+        <div><label class="l">مخاطب</label><div class="pills" id="aud"><button data-a="int" class="on">داخلی (با نام)</button><button data-a="pub">عمومی (بدون نام)</button></div></div>
+        <div id="thw"><label class="l">سبک اینفوگرافیک</label><div class="pills" id="thm"><button data-th="" class="on">اقیانوس</button><button data-th="night">شب</button><button data-th="light">روشن</button></div></div>
+      </div>
+      <div id="tg" style="display:grid;gap:12px"><div id="info"></div><button onclick="dlInfo()"><i data-i="dl"></i>دانلود اینفوگرافیک (تصویر)</button></div>
+      <div id="tr" class="hide card rcard"><h3>خروجی گزارش</h3>
+        <p>«داخلی» شامل فهرست کامل اعضا (نام، موبایل، تعهد) و برای استفاده‌ی مدیریتی است. «عمومی» فقط آمار کلی دارد و هیچ نام یا شماره‌ای در آن نیست و برای انتشار مناسب است.</p>
+        <div class="rbtns"><button onclick="makePdf()"><i data-i="dl"></i>PDF رسمی</button><button class="o" onclick="exportXlsx()"><i data-i="dl"></i>اکسل</button></div></div>
+    </div>
+  </main>
+  <nav>
+    <div class="brand"><img src="icon.svg" alt="">طرح قطره و ۳۱۳</div>
+    <button class="n on" data-v="dash"><i data-i="dash"></i>داشبورد</button>
+    <button class="n" data-v="mem"><i data-i="users"></i>اعضا</button>
+    <button class="fab" onclick="openForm('new')" aria-label="افزودن"><i data-i="plus"></i><span class="side-only" style="margin:0">افزودن عضو</span></button>
+    <button class="n" data-v="info"><i data-i="spark"></i>گزارش‌ها</button>
+    <button class="n side-only" onclick="logout()"><i data-i="out"></i>خروج</button>
+  </nav>
+</div>
+
+<div id="modal" class="hide" onclick="if(event.target===this)closeForm()">
+  <div class="sheet">
+    <div class="sh-h"><h3 id="ft"></h3><button onclick="closeForm()" aria-label="بستن">✕</button></div>
+    <div class="sh-b">
+      <div id="pf">
+        <div class="g2"><div><label class="l">نام</label><input id="fname" autocomplete="off"></div><div><label class="l">نام خانوادگی</label><input id="ffam" autocomplete="off"></div></div>
+        <div class="g2"><div><label class="l">موبایل</label><input id="fph" inputmode="numeric" maxlength="11" placeholder="09123456789"></div><div><label class="l">تعهد ماهانه (تومان)</label><input id="fpl" inputmode="numeric"></div></div>
+        <div id="ex" class="hide"><div class="g2"><div><label class="l">طرح</label><select id="fplan"><option value="313">طرح ۳۱۳</option><option value="ghatre">طرح قطره</option></select></div><div><label class="l">معرف</label><select id="fpar"></select></div></div></div>
+      </div>
+      <label class="sw" id="swr"><span><b>طرح قطره</b><br><small style="color:var(--m)">افزودن زیرمجموعه برای این فرد</small></span><input type="checkbox" id="fk" onchange="toggleKids()"></label>
+      <div id="kidsw" class="hide"><div id="kids"></div><button class="addk" onclick="addKid()">＋ زیرمجموعه دیگر</button></div>
+      <div class="err" id="fe"></div>
+    </div>
+    <div class="sh-f"><button onclick="save()">ثبت</button><button class="o" onclick="closeForm()">انصراف</button></div>
+  </div>
+</div>
+
+<script>
+/* آدرس Web App اپ اسکریپت: در گیت‌هاب از Variable به نام APPS_SCRIPT_URL جایگزین می‌شود. خالی = حالت دمو */
+const API = 'https://script.google.com/macros/s/AKfycbwKOOOdgqYFNifwV7zjBn0pIGG9yrXfS-hDVPeELckIM-hvOl4B-WUNrl7FpIFK5Xf_ww/exec'.startsWith('__') ? '' : 'https://script.google.com/macros/s/AKfycbwKOOOdgqYFNifwV7zjBn0pIGG9yrXfS-hDVPeELckIM-hvOl4B-WUNrl7FpIFK5Xf_ww/exec';
+
+const IC = { dash: 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z', fp: 'M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4M14 13.12c0 2.38 0 6.38-1 8.88M17.29 21.02c.12-.6.43-2.3.5-3.02M2 12a10 10 0 0 1 18-6M21.8 16c.2-2 .131-5.354 0-6M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2M8.65 22c.21-.66.45-1.32.57-2M9 6.8a6 6 0 0 1 9 5.2v2', users: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8', spark: 'M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2z', plus: 'M12 5v14M5 12h14', out: 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9', dl: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3' };
+document.querySelectorAll('i[data-i]').forEach(e => e.outerHTML = `<svg class="i" viewBox="0 0 24 24"><path d="${IC[e.dataset.i]}"/></svg>`);
+
+const S = { token: '', role: 'admin', data: [], plan: 'all', mode: 'new', id: null, view: 'dash' };
+const $ = id => document.getElementById(id);
+const fa = n => Number(n || 0).toLocaleString('fa-IR');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toEn = s => String(s).replace(/[۰-۹]/g, c => '۰۱۲۳۴۵۶۷۸۹'.indexOf(c)).replace(/[٠-٩]/g, c => '٠١٢٣٤٥٦٧٨٩'.indexOf(c));
+const PL = { ghatre: 'طرح قطره', '313': 'طرح ۳۱۳' }, CL = { ghatre: '#0ea5e9', '313': '#6366f1' };
+let charts = {}, demo = [
+  { id: 'a1', plan: '313', name: 'علی', family: 'رضایی', phone: '09121111111', pledge: 500000, parentId: '', createdAt: '2026-09-10' },
+  { id: 'a2', plan: 'ghatre', name: 'سارا', family: 'احمدی', phone: '09122222222', pledge: 300000, parentId: 'a1', createdAt: '2026-10-02' },
+  { id: 'a3', plan: 'ghatre', name: 'محمد', family: 'کریمی', phone: '09123333333', pledge: 400000, parentId: 'a1', createdAt: '2026-10-20' },
+  { id: 'a4', plan: '313', name: 'مریم', family: 'حسینی', phone: '09124444444', pledge: 400000, parentId: '', createdAt: '2026-11-05' }
+];
+
+async function api(action, p = {}) {
+  if (!API) {
+    const id = () => 'd' + Math.random().toString(36).slice(2, 8);
+    if (action === 'login') return p.username === 'admin' && p.password === 'admin' ? { ok: true, token: 'demo', role: 'admin' } : { ok: false, error: 'حالت دمو: admin / admin' };
+    if (action === 'registerDevice') return { ok: true, deviceToken: 'demo-' + id() };
+    if (action === 'revokeDevice') return { ok: true };
+    if (action === 'deviceLogin') return { ok: true, token: 'demo', role: 'admin' };
+    if (action === 'list') return { ok: true, data: demo };
+    if (action === 'add') { const n = id(); demo.push({ ...p.member, id: n }); return { ok: true, id: n }; }
+    if (action === 'addMany') { p.members.forEach(m => demo.push({ ...m, plan: 'ghatre', parentId: p.parentId, id: id() })); return { ok: true }; }
+    if (action === 'update') { demo = demo.map(m => m.id === p.id ? { ...m, ...p.member } : m); return { ok: true }; }
+    if (action === 'remove') { demo = demo.filter(m => m.id !== p.id && m.parentId !== p.id); return { ok: true }; }
+  }
+  try {
+    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action, token: S.token, ...p }) });
+    return await r.json();
+  } catch (e) { return { ok: false, error: 'خطای ارتباط با سرور' }; }
+}
+function toast(t) { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.append(d); setTimeout(() => d.remove(), 2600); }
+
+function enter(r, user) {
+  S.token = r.token; S.role = r.role; S.user = user;
+  $('login').classList.add('hide'); $('shell').classList.remove('hide'); load(); initBio();
+}
+async function login() {
+  $('le').textContent = '';
+  const u = $('u').value.trim(), r = await api('login', { username: u, password: $('p').value });
+  if (!r.ok) return $('le').textContent = r.error;
+  enter(r, u);
+  if (!dev() && await bioOK() && !localStorage.getItem('tarh_nobio')) {
+    if (confirm('ورود سریع با اثرانگشت روی این گوشی فعال شود؟')) enableBio(); else localStorage.setItem('tarh_nobio', '1');
+  }
+}
+function logout() { S.token = ''; $('shell').classList.add('hide'); $('login').classList.remove('hide'); $('p').value = ''; initBio(); }
+/* ---- ورود با اثرانگشت (WebAuthn؛ سامسونگ: Chrome / Samsung Internet) ---- */
+const b64u = { enc: b => btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''), dec: s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0)) };
+const rnd = n => crypto.getRandomValues(new Uint8Array(n));
+const bioOK = async () => !!(window.PublicKeyCredential && window.isSecureContext && await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(() => false));
+const dev = () => { try { return JSON.parse(localStorage.getItem('tarh_dev') || 'null'); } catch (e) { return null; } };
+async function initBio() {
+  const ok = await bioOK();
+  $('bio').classList.toggle('hide', !(ok && dev()));
+  $('bioT').classList.toggle('hide', !ok); $('bioT').style.opacity = dev() ? 1 : .5;
+}
+async function bioLogin() {
+  const d = dev(); $('le').textContent = ''; if (!d) return;
+  try { await navigator.credentials.get({ publicKey: { challenge: rnd(32), allowCredentials: [{ type: 'public-key', id: b64u.dec(d.cid) }], userVerification: 'required', rpId: location.hostname, timeout: 60000 } }); }
+  catch (e) { return $('le').textContent = 'اثرانگشت تأیید نشد'; }
+  const r = await api('deviceLogin', { deviceToken: d.t });
+  if (!r.ok) { if (/دستگاه/.test(r.error)) { localStorage.removeItem('tarh_dev'); initBio(); } return $('le').textContent = r.error; }
+  enter(r, d.u);
+}
+async function enableBio() {
+  if (!await bioOK()) return toast('اثرانگشت پشتیبانی نمی‌شود. قفل صفحه با اثرانگشت را در تنظیمات گوشی فعال کنید و با Chrome یا Samsung Internet (نه مرورگر داخل تلگرام و...) باز کنید.');
+  const r = await api('registerDevice', { label: navigator.userAgent.slice(0, 80) });
+  if (!r.ok) return toast(r.error);
+  try {
+    const c = await navigator.credentials.create({ publicKey: { challenge: rnd(32), rp: { name: 'پنل طرح قطره', id: location.hostname }, user: { id: rnd(16), name: S.user || 'user', displayName: S.user || 'user' }, pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }], authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'discouraged' }, timeout: 60000 } });
+    localStorage.setItem('tarh_dev', JSON.stringify({ t: r.deviceToken, cid: b64u.enc(c.rawId), u: S.user })); toast('ورود با اثرانگشت فعال شد ✓');
+  } catch (e) { await api('revokeDevice', { deviceToken: r.deviceToken }); toast('فعال‌سازی اثرانگشت انجام نشد'); }
+  initBio();
+}
+async function bioToggle() {
+  const d = dev();
+  if (!d) return enableBio();
+  if (!confirm('ورود با اثرانگشت روی این گوشی غیرفعال شود؟')) return;
+  await api('revokeDevice', { deviceToken: d.t }); localStorage.removeItem('tarh_dev'); toast('غیرفعال شد'); initBio();
+}
+$('p').addEventListener('keydown', e => e.key === 'Enter' && login());
+async function load() {
+  const r = await api('list');
+  if (!r.ok) { toast(r.error); if (/نشست/.test(r.error)) logout(); return; }
+  S.data = r.data; render();
+}
+const pName = id => { const m = S.data.find(x => String(x.id) === String(id)); return m ? m.name + ' ' + m.family : '—'; };
+const sum = a => a.reduce((s, m) => s + Number(m.pledge || 0), 0);
+const kidsOf = id => S.data.filter(m => String(m.parentId) === String(id));
+
+const TT = { dash: 'داشبورد', mem: 'اعضا', info: 'گزارش‌ها و اینفوگرافیک' };
+document.querySelectorAll('nav .n[data-v]').forEach(b => b.onclick = () => {
+  S.view = b.dataset.v;
+  document.querySelectorAll('nav .n[data-v]').forEach(x => x.classList.toggle('on', x === b));
+  ['dash', 'mem', 'info'].forEach(v => $('v-' + v).classList.toggle('hide', v !== S.view));
+  $('vt').textContent = TT[S.view]; scrollTo(0, 0); render();
+});
+$('pills').querySelectorAll('button').forEach(b => b.onclick = () => {
+  S.plan = b.dataset.p; $('pills').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); render();
+});
+
+function render() {
+  const d = S.data, gh = d.filter(m => m.plan === 'ghatre'), p3 = d.filter(m => m.plan === '313');
+  $('stats').innerHTML = [['کل افراد', fa(d.length)], ['طرح ۳۱۳', fa(p3.length)], ['طرح قطره', fa(gh.length)], ['جمع تعهد ماهانه', fa(sum(d)) + ' ت']]
+    .map(([a, b], i) => `<div class="stat" style="animation-delay:${i * .07}s"><small>${a}</small><b>${b}</b></div>`).join('');
+  if (S.view === 'dash') drawCharts(gh, p3);
+  if (S.view === 'info') drawInfo();
+  if (S.view === 'mem') {
+    const q = toEn($('q').value.trim());
+    const rows = d.filter(m => (S.plan === 'all' || m.plan === S.plan) && (!q || (m.name + m.family + m.phone).includes(q)));
+    $('tb').innerHTML = rows.length ? rows.map((m, i) => `<tr style="animation-delay:${Math.min(i, 12) * .03}s">
+      <td data-l="نام">${esc(m.name)} ${esc(m.family)}</td><td data-l="موبایل" dir="ltr">${esc(m.phone)}</td>
+      <td data-l="طرح"><span class="tag ${m.plan === '313' ? 'p313' : 'ghatre'}">${PL[m.plan]}</span></td>
+      <td data-l="معرف">${esc(pName(m.parentId))}</td><td data-l="تعهد ماهانه">${fa(m.pledge)}</td><td data-l="زیرمجموعه">${fa(kidsOf(m.id).length)}</td>
+      <td class="ac"><button class="ad" onclick="openForm('kids','${esc(m.id)}')">＋ زیرمجموعه</button><button class="ed" onclick="openForm('edit','${esc(m.id)}')">ویرایش</button>${S.role === 'admin' ? `<button class="x" onclick="del('${esc(m.id)}')">حذف</button>` : ''}</td></tr>`).join('')
+      : '<tr><td class="empty" style="display:block;text-align:center">موردی یافت نشد</td></tr>';
+  }
+}
+
+function drawCharts(gh, p3) {
+  const mk = (id, cfg) => { charts[id] && charts[id].destroy(); charts[id] = new Chart($(id), cfg); };
+  const font = { family: 'Vazirmatn' };
+  const base = t => ({ responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { font } }, title: { display: true, text: t, font } } });
+  mk('c1', { type: 'doughnut', data: { labels: ['طرح قطره', 'طرح ۳۱۳'], datasets: [{ data: [gh.length, p3.length], backgroundColor: [CL.ghatre, CL['313']], borderWidth: 0 }] }, options: base('سهم هر طرح') });
+  const t = topRef();
+  mk('c2', { type: 'bar', data: { labels: t.map(x => x[0]), datasets: [{ label: 'تعهد زیرمجموعه‌ها', data: t.map(x => x[1]), backgroundColor: '#3b82f6', borderRadius: 8 }] }, options: base('برترین معرف‌ها') });
+}
+function topRef() {
+  const by = {};
+  S.data.forEach(m => { if (m.parentId) { const k = pName(m.parentId); by[k] = (by[k] || 0) + Number(m.pledge || 0); } });
+  return Object.entries(by).sort((a, b) => b[1] - a[1]).slice(0, 5);
+}
+/* ---- فرم ---- */
+function kidHtml() {
+  return `<div class="kid"><div class="kh"><b>زیرمجموعه</b><button onclick="this.closest('.kid').remove()">حذف</button></div>
+  <div class="g2"><input class="kn" placeholder="نام" autocomplete="off"><input class="kf" placeholder="نام خانوادگی" autocomplete="off">
+  <input class="kp" placeholder="موبایل" inputmode="numeric" maxlength="11"><input class="kl" placeholder="تعهد ماهانه" inputmode="numeric"></div></div>`;
+}
+function addKid() { $('kids').insertAdjacentHTML('beforeend', kidHtml()); const k = $('kids').lastElementChild.querySelector('input'); k.focus(); }
+function toggleKids() { const on = $('fk').checked; $('kidsw').classList.toggle('hide', !on); if (on && !$('kids').children.length) addKid(); }
+
+function openForm(mode, id) {
+  S.mode = mode; S.id = id || null; const m = id ? S.data.find(x => String(x.id) === String(id)) : null;
+  ['fname', 'ffam', 'fph', 'fpl'].forEach(i => $(i).value = ''); $('fe').textContent = ''; $('kids').innerHTML = ''; $('fk').checked = false; $('kidsw').classList.add('hide');
+  $('pf').classList.toggle('hide', mode === 'kids'); $('swr').classList.toggle('hide', mode !== 'new');
+  $('ex').classList.toggle('hide', !(mode === 'edit' && S.role === 'admin'));
+  if (mode === 'new') $('ft').textContent = 'افزودن عضو طرح ۳۱۳';
+  if (mode === 'kids') { $('ft').textContent = 'زیرمجموعه‌ی ' + pName(id); $('kidsw').classList.remove('hide'); addKid(); }
+  if (mode === 'edit') {
+    $('ft').textContent = 'ویرایش اطلاعات'; $('fname').value = m.name; $('ffam').value = m.family; $('fph').value = m.phone; $('fpl').value = m.pledge; $('fplan').value = m.plan;
+    $('fpar').innerHTML = '<option value="">— بدون معرف —</option>' + S.data.filter(x => x.id !== m.id).map(x => `<option value="${esc(x.id)}">${esc(x.name)} ${esc(x.family)}</option>`).join('');
+    $('fpar').value = m.parentId || '';
+  }
+  $('modal').classList.remove('hide'); document.body.style.overflow = 'hidden';
+}
+function closeForm() { $('modal').classList.add('hide'); document.body.style.overflow = ''; }
+const okPhone = p => /^09\d{9}$/.test(p);
+
+function readKids() {
+  const out = [];
+  for (const k of $('kids').querySelectorAll('.kid')) {
+    const m = { name: k.querySelector('.kn').value.trim(), family: k.querySelector('.kf').value.trim(), phone: toEn(k.querySelector('.kp').value.trim()), pledge: toEn(k.querySelector('.kl').value.replace(/[,،]/g, '')) };
+    if (!m.name && !m.family && !m.phone && !m.pledge) continue;
+    if (!m.name || !m.family) return { err: 'نام و نام خانوادگی زیرمجموعه را کامل کنید' };
+    if (!okPhone(m.phone)) return { err: 'موبایل زیرمجموعه نامعتبر است: ' + (m.phone || 'خالی') };
+    out.push(m);
+  }
+  return { out };
+}
+async function save() {
+  const fe = $('fe'); fe.textContent = '';
+  const person = () => ({ name: $('fname').value.trim(), family: $('ffam').value.trim(), phone: toEn($('fph').value.trim()), pledge: toEn($('fpl').value.replace(/[,،]/g, '')) });
+  let r;
+  if (S.mode === 'kids') {
+    const k = readKids(); if (k.err) return fe.textContent = k.err; if (!k.out.length) return fe.textContent = 'حداقل یک زیرمجموعه وارد کنید';
+    r = await api('addMany', { parentId: S.id, members: k.out });
+  } else {
+    const m = person();
+    if (!m.name || !m.family) return fe.textContent = 'نام و نام خانوادگی را وارد کنید';
+    if (!okPhone(m.phone)) return fe.textContent = 'موبایل باید ۱۱ رقم و با ۰۹ شروع شود';
+    if (S.mode === 'edit') {
+      r = await api('update', { id: S.id, member: { ...m, plan: $('fplan').value, parentId: S.role === 'admin' ? $('fpar').value : undefined } });
+    } else {
+      const k = $('fk').checked ? readKids() : { out: [] }; if (k.err) return fe.textContent = k.err;
+      r = await api('add', { member: { ...m, plan: '313', parentId: '' } });
+      if (r.ok && k.out.length) r = await api('addMany', { parentId: r.id, members: k.out });
+    }
+  }
+  if (!r.ok) return fe.textContent = r.error;
+  closeForm(); toast('با موفقیت ثبت شد ✓'); load();
+}
+async function del(id) {
+  if (!confirm('این مورد حذف شود؟')) return;
+  const r = await api('remove', { id }); toast(r.ok ? 'حذف شد' : r.error); load();
+}
+/* ---- گزارش‌ها: اینفوگرافیک چندحالته + PDF رسمی + اکسل ---- */
+Object.assign(S, { aud: 'int', th: '', tab: 'ig' });
+const jal = () => new Date().toLocaleDateString('fa-IR-u-ca-persian', { year: 'numeric', month: 'long', day: 'numeric' });
+const fmtK = n => n >= 1e6 ? fa(+(n / 1e6).toFixed(1)) + ' م' : n >= 1000 ? fa(Math.round(n / 1000)) + ' هزار' : fa(n);
+function A() {
+  const d = S.data, gh = d.filter(m => m.plan === 'ghatre'), p3 = d.filter(m => m.plan === '313'), total = sum(d), groups = {};
+  d.forEach(m => { if (m.parentId) (groups[m.parentId] = groups[m.parentId] || []).push(m); });
+  const pl = d.map(m => Number(m.pledge || 0)).filter(x => x > 0), tiers = [];
+  if (pl.length) {
+    const mn = Math.min(...pl), mx = Math.max(...pl), n = mn === mx ? 1 : 4, st = (mx - mn) / n || 1;
+    for (let i = 0; i < n; i++) { const lo = mn + st * i, hi = i === n - 1 ? mx : mn + st * (i + 1); tiers.push([n === 1 ? fmtK(mn) : fmtK(lo) + '–' + fmtK(hi), pl.filter(x => x >= lo && (i === n - 1 ? x <= hi : x < hi)).length]); }
+  }
+  const mo = {};
+  d.forEach(m => { const t = new Date(m.createdAt); if (m.createdAt && !isNaN(t)) { const k = t.toISOString().slice(0, 7); (mo[k] = mo[k] || { t, c: 0 }).c++; } });
+  const months = Object.keys(mo).sort().slice(-6).map(k => [mo[k].t.toLocaleDateString('fa-IR-u-ca-persian', { month: 'long' }), mo[k].c]);
+  const sz = [['۱ نفر', 0], ['۲ تا ۴', 0], ['۵ تا ۹', 0], ['۱۰+', 0]];
+  Object.values(groups).forEach(a => sz[a.length === 1 ? 0 : a.length < 5 ? 1 : a.length < 10 ? 2 : 3][1]++);
+  const top = Object.entries(groups).map(([id, a]) => [id, sum(a), a.length]).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  return { d, gh, p3, total, avg: d.length ? Math.round(total / d.length) : 0, groups, tiers, months, sz, top, big: Math.max(0, ...Object.values(groups).map(a => a.length)) };
+}
+const vb = (a, unit = '') => { const mx = Math.max(1, ...a.map(x => x[1])); return `<div class="vb">${a.map(([l, v]) => `<div><b>${fa(v)}${unit}</b><span style="height:${Math.max(6, v / mx * 100)}%"></span><small>${l}</small></div>`).join('')}</div>`; };
+
+function drawInfo() {
+  const a = A(), pub = S.aud === 'pub', tot = a.d.length || 1, C = 2 * Math.PI * 56, g = a.gh.length / tot * C, v = a.p3.length / tot * C, mx = a.top[0] ? a.top[0][1] : 1;
+  const nm = (id, i) => pub ? 'معرف ' + fa(i + 1) : esc(pName(id));
+  $('info').className = S.th;
+  $('info').innerHTML = `<h2>💧 ${pub ? 'گزارش عمومی' : 'گزارش داخلی'} طرح قطره و ۳۱۳</h2><div class="sub">${jal()}${pub ? ' · 🔒 بدون اطلاعات شخصی' : ''}</div>
+  <div class="big"><div><b>${fa(a.d.length)}</b><small>عضو فعال</small></div><div><b>${fmtK(a.total)}</b><small>تعهد ماهانه (تومان)</small></div><div><b>${fmtK(a.avg)}</b><small>میانگین تعهد</small></div><div><b>${fa(Object.keys(a.groups).length)}</b><small>معرف فعال</small></div></div>
+  <div class="ip"><h3>سهم هر طرح</h3><div class="ring"><svg viewBox="0 0 140 140"><circle cx="70" cy="70" r="56" stroke="#e8f0fe"/><circle cx="70" cy="70" r="56" stroke="${CL.ghatre}" stroke-dasharray="${g} ${C}"/><circle cx="70" cy="70" r="56" stroke="${CL['313']}" stroke-dasharray="${v} ${C}" stroke-dashoffset="${-g}"/></svg>
+  <div class="lg"><div><i style="background:${CL['313']}"></i>طرح ۳۱۳: ${fa(a.p3.length)} نفر — ${fmtK(sum(a.p3))} ت</div><div><i style="background:${CL.ghatre}"></i>طرح قطره: ${fa(a.gh.length)} نفر — ${fmtK(sum(a.gh))} ت</div></div></div></div>
+  ${a.tiers.length ? `<div class="ip"><h3>📊 توزیع مبلغ تعهد (تعداد نفر)</h3>${vb(a.tiers)}</div>` : ''}
+  ${a.months.length ? `<div class="ip"><h3>📈 روند ثبت‌نام ماهانه</h3>${vb(a.months)}</div>` : ''}
+  ${pub ? `<div class="ip"><h3>🌐 اندازه شبکه‌ها (تعداد معرف)</h3>${vb(a.sz)}<p style="margin-top:10px;font-size:.82rem;color:var(--m)">بزرگ‌ترین شبکه: ${fa(a.big)} زیرمجموعه</p></div>` :
+  `<div class="ip"><h3>🏆 برترین معرف‌ها</h3>${a.top.length ? a.top.map((x, i) => `<div class="lb"><span class="n">${fa(i + 1)}</span><div><b>${nm(x[0], i)}</b> <small>${fmtK(x[1])} ت · ${fa(x[2])} نفر</small><div class="tr"><span style="width:${x[1] / mx * 100}%"></span></div></div></div>`).join('') : '<div class="empty">هنوز زیرمجموعه‌ای ثبت نشده</div>'}</div>
+  <div class="ip"><h3>🌿 شبکه زیرمجموعه‌ها</h3><div class="net">${Object.entries(a.groups).sort((x, y) => y[1].length - x[1].length).slice(0, 5).map(([id, ch]) => `<div><b>${esc(pName(id))}</b> <small style="color:var(--m)">(${fa(ch.length)} نفر)</small><div class="chips">${ch.map(c => `<span class="chip" style="background:${CL[c.plan]}">${esc(c.name)} ${esc(c.family)}</span>`).join('')}</div></div>`).join('') || '<div class="empty">—</div>'}</div></div>`}`;
+}
+async function dlInfo() {
+  const c = await html2canvas($('info'), { scale: 2, backgroundColor: null });
+  const a = document.createElement('a'); a.download = 'infographic-' + S.aud + '.png'; a.href = c.toDataURL(); a.click();
+}
+
+/* PDF رسمی (A4، فارسی راست‌به‌چپ) */
+function reportPages() {
+  const a = A(), pub = S.aud === 'pub', no = fa(new Date().toISOString().slice(0, 10).replace(/-/g, ''));
+  const T = (h, r) => `<table class="rt"><thead><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${r.map(x => `<tr>${x.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  const H = (t, s) => `<div class="rh"><div class="lg2">💧</div><div style="flex:1"><h1>${t}</h1><p>${s}</p></div><div class="meta">تاریخ: ${jal()}<br>شماره: ${no}</div></div>`;
+  const pc = x => a.d.length ? fa(Math.round(x / a.d.length * 100)) + '٪' : '—';
+  const pages = [];
+  pages.push(H('گزارش رسمی طرح قطره و طرح ۳۱۳', pub ? 'گزارش عمومی — فاقد اطلاعات شخصی' : 'گزارش داخلی — دارای اطلاعات اعضا') +
+    '<h2>۱. خلاصه وضعیت</h2>' + T(['شاخص', 'مقدار'], [['تعداد کل اعضا', fa(a.d.length)], ['جمع تعهد ماهانه (تومان)', fa(a.total)], ['میانگین تعهد هر عضو (تومان)', fa(a.avg)], ['تعداد معرف‌های فعال', fa(Object.keys(a.groups).length)], ['بزرگ‌ترین شبکه (زیرمجموعه)', fa(a.big)]]) +
+    '<h2>۲. تفکیک طرح‌ها</h2>' + T(['طرح', 'تعداد', 'جمع تعهد ماهانه (تومان)', 'سهم از کل'], [['طرح ۳۱۳', fa(a.p3.length), fa(sum(a.p3)), pc(a.p3.length)], ['طرح قطره', fa(a.gh.length), fa(sum(a.gh)), pc(a.gh.length)]]) +
+    '<h2>۳. توزیع مبلغ تعهد</h2>' + T(['بازه مبلغ (تومان)', 'تعداد افراد'], a.tiers.length ? a.tiers.map(x => [x[0], fa(x[1])]) : [['—', '—']]));
+  pages.push(pub ? '<h2>۴. توزیع اندازه شبکه‌ها</h2>' + T(['تعداد زیرمجموعه‌ی هر معرف', 'تعداد معرف'], a.sz.map(x => [x[0], fa(x[1])])) + (a.months.length ? '<h2>۵. روند ثبت‌نام ماهانه</h2>' + T(['ماه', 'ثبت‌نام جدید'], a.months.map(x => [x[0], fa(x[1])])) : '')
+    : '<h2>۴. معرف‌های برتر</h2>' + T(['ردیف', 'نام معرف', 'تعداد زیرمجموعه', 'جمع تعهد زیرمجموعه‌ها (تومان)'], a.top.length ? a.top.map((x, i) => [fa(i + 1), esc(pName(x[0])), fa(x[2]), fa(x[1])]) : [['—', '—', '—', '—']]) + (a.months.length ? '<h2>۵. روند ثبت‌نام ماهانه</h2>' + T(['ماه', 'ثبت‌نام جدید'], a.months.map(x => [x[0], fa(x[1])])) : ''));
+  if (!pub) for (let i = 0; i < a.d.length; i += 20) pages.push(`<h2>${i ? 'ادامه ' : ''}فهرست اعضا</h2>` + T(['ردیف', 'نام و نام خانوادگی', 'موبایل', 'طرح', 'معرف', 'تعهد (تومان)'], a.d.slice(i, i + 20).map((m, j) => [fa(i + j + 1), esc(m.name + ' ' + m.family), `<span dir="ltr">${esc(m.phone)}</span>`, PL[m.plan], esc(pName(m.parentId)), fa(m.pledge)])));
+  pages[pages.length - 1] += '<div class="sig"><div>مسئول طرح<br><br>نام و امضا</div><div>تأییدکننده<br><br>مهر و امضا</div></div>';
+  return pages.map((p, i) => `<div class="pg">${p}<div class="ft"><span>صفحه ${fa(i + 1)} از ${fa(pages.length)}</span><span>${pub ? 'گزارش عمومی' : 'محرمانه — صرفاً جهت استفاده داخلی'}</span></div></div>`);
+}
+async function makePdf() {
+  if (!S.data.length) return toast('داده‌ای برای گزارش نیست');
+  toast('در حال ساخت PDF…');
+  try {
+    await document.fonts.ready;
+    const { jsPDF } = window.jspdf, pdf = new jsPDF({ unit: 'mm', format: 'a4', compress: true }), box = $('rend'), pages = reportPages();
+    for (let i = 0; i < pages.length; i++) {
+      box.innerHTML = pages[i];
+      const c = await html2canvas(box.firstChild, { scale: 2, backgroundColor: '#fff', scrollX: 0, scrollY: 0 });
+      if (i) pdf.addPage();
+      pdf.addImage(c.toDataURL('image/jpeg', .92), 'JPEG', 0, 0, 210, 297);
+    }
+    box.innerHTML = ''; pdf.save('tarh-report-' + (S.aud === 'pub' ? 'public' : 'internal') + '.pdf'); toast('PDF آماده شد ✓');
+  } catch (e) { toast('خطا در ساخت PDF'); }
+}
+function exportXlsx() {
+  const a = A(), pub = S.aud === 'pub', wb = XLSX.utils.book_new(), add = (n, r) => { const w = XLSX.utils.aoa_to_sheet(r); w['!cols'] = r[0].map(() => ({ wch: 24 })); XLSX.utils.book_append_sheet(wb, w, n); };
+  add('خلاصه', [['شاخص', 'مقدار'], ['تعداد کل اعضا', a.d.length], ['جمع تعهد ماهانه', a.total], ['میانگین تعهد', a.avg], ['معرف‌های فعال', Object.keys(a.groups).length], ['بزرگ‌ترین شبکه', a.big]]);
+  add('طرح‌ها', [['طرح', 'تعداد', 'جمع تعهد'], ['طرح ۳۱۳', a.p3.length, sum(a.p3)], ['طرح قطره', a.gh.length, sum(a.gh)]]);
+  if (a.tiers.length) add('توزیع تعهد', [['بازه', 'تعداد'], ...a.tiers]);
+  if (a.months.length) add('ثبت‌نام ماهانه', [['ماه', 'تعداد'], ...a.months]);
+  if (pub) add('اندازه شبکه‌ها', [['زیرمجموعه', 'تعداد معرف'], ...a.sz]);
+  else {
+    add('معرف‌ها', [['معرف', 'تعداد زیرمجموعه', 'جمع تعهد'], ...Object.entries(a.groups).map(([id, c]) => [pName(id), c.length, sum(c)])]);
+    add('اعضا', [['نام', 'نام خانوادگی', 'موبایل', 'طرح', 'معرف', 'تعهد ماهانه'], ...a.d.map(m => [m.name, m.family, m.phone, PL[m.plan], pName(m.parentId), Number(m.pledge)])]);
+  }
+  wb.Workbook = { Views: [{ RTL: true }] };
+  XLSX.writeFile(wb, 'tarh-report-' + (pub ? 'public' : 'internal') + '.xlsx');
+}
+function bindRep() {
+  const pill = (id, fn) => $(id).querySelectorAll('button').forEach(b => b.onclick = () => { $(id).querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); fn(b); render(); });
+  pill('aud', b => { S.aud = b.dataset.a; });
+  pill('thm', b => { S.th = b.dataset.th; });
+  document.querySelectorAll('.seg2 button').forEach(b => b.onclick = () => {
+    S.tab = b.dataset.t; document.querySelectorAll('.seg2 button').forEach(x => x.classList.toggle('on', x === b));
+    $('tg').classList.toggle('hide', S.tab !== 'ig'); $('thw').classList.toggle('hide', S.tab !== 'ig'); $('tr').classList.toggle('hide', S.tab !== 'rp');
+  });
+}
+bindRep();
+initBio();
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>
